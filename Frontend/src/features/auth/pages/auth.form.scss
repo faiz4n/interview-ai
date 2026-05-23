@@ -21,7 +21,7 @@ main {
   }
 
   a {
-    color: #e10053;
+    color: #ff2d78;
     text-decoration: none;
   }
 
@@ -30,12 +30,30 @@ main {
     flex-direction: column;
     gap: 0.5rem;
 
+    label {
+      color: #e6edf3;
+      font-size: 0.9rem;
+      font-weight: 500;
+    }
+
     input {
-      border: none;
+      border: 1px solid #2a3348;
       outline: none;
       padding-inline: 1rem;
       padding-block: 0.75rem;
       border-radius: 0.75rem;
+      background-color: #1e2535;
+      color: #e6edf3;
+      transition: all 0.3s ease-in-out;
+
+      &:focus {
+        border-color: #ff2d78;
+        box-shadow: 0 0 0 3px rgba(255, 45, 120, 0.1);
+      }
+
+      &::placeholder {
+        color: #7d8590;
+      }
     }
   }
 }

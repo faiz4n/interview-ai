@@ -56,10 +56,12 @@ const skillGapSchema = new mongoose.Schema(
   },
 );
 
-const preparatiionPlanSchema = new mongoose.Schema({
-  day: {
-    type: String,
-    required: [true, "Day is required"],
+const preparationPlanSchema = new mongoose.Schema(
+  {
+    day: {
+      type: String,
+      required: [true, "Day is required"],
+    },
     focus: {
       type: String,
       required: [true, "Focus is required"],
@@ -71,7 +73,8 @@ const preparatiionPlanSchema = new mongoose.Schema({
       },
     ],
   },
-});
+  { _id: false },
+);
 
 const interviewReportSchema = new mongoose.Schema(
   {
@@ -95,7 +98,11 @@ const interviewReportSchema = new mongoose.Schema(
     technicalQuestions: [technicalQuestionSchema],
     behavioralQuestions: [behavioralQuestionSchema],
     skillGaps: [skillGapSchema],
-    preparationPlan: preparatiionPlanSchema,
+    preparationPlan: [preparationPlanSchema],
+    user: {
+      type: mongoose.Schema.Types.ObjectId,
+      ref: "users",
+    },
   },
   {
     timestamps: true,

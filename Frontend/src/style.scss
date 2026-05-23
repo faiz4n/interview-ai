@@ -9,9 +9,9 @@
 html,
 body,
 #root {
-  background-color: rgb(21, 21, 21);
+  background-color: #0d1117;
   width: 100%;
-  color: whitesmoke;
+  color: #e6edf3;
   font-family:
     system-ui,
     -apple-system,
@@ -24,4 +24,8 @@ body,
     "Open Sans",
     "Helvetica Neue",
     sans-serif;
+
+  .highlight {
+    color: #ff2d78;
+  }
 }
