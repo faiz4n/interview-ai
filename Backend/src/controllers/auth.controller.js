@@ -41,7 +41,13 @@ async function registerUserController(req, res) {
     { expiresIn: "1d" },
   );
 
-  res.cookie("token", token);
+  res.cookie("token", token, {
+    httpOnly: false,
+    secure: process.env.NODE_ENV === "production",
+    sameSite: "lax",
+    maxAge: 24 * 60 * 60 * 1000, // 1 day in milliseconds
+    path: "/",
+  });
 
   return res.status(201).json({
     msg: "User created successfully",
@@ -79,7 +85,13 @@ async function loginUserController(req, res) {
     { expiresIn: "1d" },
   );
 
-  res.cookie("token", token);
+  res.cookie("token", token, {
+    httpOnly: false,
+    secure: process.env.NODE_ENV === "production",
+    sameSite: "lax",
+    maxAge: 24 * 60 * 60 * 1000, // 1 day in milliseconds
+    path: "/",
+  });
 
   return res.status(200).json({
     msg: "User logged in successfully",
