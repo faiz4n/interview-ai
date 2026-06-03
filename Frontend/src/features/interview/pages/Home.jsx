@@ -5,10 +5,11 @@ import { useRef } from "react";
 import { useNavigate } from "react-router";
 
 const Home = () => {
-  const { loading, generateReport, reports } = useInterview();
+  const { generateReport, reports } = useInterview();
   const [jobDescription, setJobDescription] = useState("");
   const [selfDescription, setSelfDescription] = useState("");
   const [resumeFileName, setResumeFileName] = useState("");
+  const [generating, setGenerating] = useState(false);
   const resumeInputRef = useRef(null);
 
   const navigate = useNavigate();
@@ -20,15 +21,17 @@ const Home = () => {
       return;
     }
 
+    setGenerating(true);
     const data = await generateReport({
       jobDescription,
       selfDescription,
       resumeFile: resumeFile || null,
     });
+    setGenerating(false);
     navigate(`/interview/${data._id}`);
   };
 
-  if (loading) {
+  if (generating) {
     return (
       <main className="loading-screen">
         <div className="spinner" />
@@ -36,6 +39,7 @@ const Home = () => {
       </main>
     );
   }
+
 
   return (
     <div className="home-page">
