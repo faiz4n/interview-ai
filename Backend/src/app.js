@@ -9,6 +9,10 @@ app.use(express.json());
 app.use(cookieParser());
 app.use(cors({ origin: process.env.VITE_FRONTEND_URL, credentials: true }));
 
+app.get("/", (req, res) => {
+  res.send("Welcome to the Interview Preparation API!");
+});
+
 app.use("/api/auth", authRouter);
 app.use("/api/interview", interviewRouter);
 
