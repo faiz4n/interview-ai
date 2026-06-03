@@ -28,6 +28,7 @@ const Home = () => {
       resumeFile: resumeFile || null,
     });
     setGenerating(false);
+    if (!data) return;
     navigate(`/interview/${data._id}`);
   };
 
