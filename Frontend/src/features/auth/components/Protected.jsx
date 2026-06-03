@@ -4,7 +4,7 @@ import { useAuth } from "../hooks/useAuth";
 const Protected = ({ children }) => {
   const { loading, user } = useAuth();
 
-  if (loading) return <main>Loading...</main>;
+  if (loading) return <main className="loading-screen"><div className="spinner" /></main>;
 
   if (!user) {
     return <Navigate to={"/login"} />;

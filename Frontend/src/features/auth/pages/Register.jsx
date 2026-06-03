@@ -18,7 +18,7 @@ function Register() {
     navigate("/");
   };
 
-  if (loading) return <main>Loading...</main>;
+  if (loading) return <main className="loading-screen"><div className="spinner" /></main>;
   return (
     <main>
       <div className="form-container">
