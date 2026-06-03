@@ -1,5 +1,4 @@
 const mongoose = require("mongoose");
-const { RiSoundModuleLine } = require("react-icons/ri");
 
 const blacklistTokenSchema = new mongoose.Schema(
   {
