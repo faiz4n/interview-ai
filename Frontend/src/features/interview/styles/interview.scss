@@ -531,3 +531,258 @@ $severity-low: #3fb950;
     border-color: rgba($severity-low, 0.3);
   }
 }
+
+// ── Score Section (content area view) ─────────────────────────────────────────
+.score-section {
+  &__body {
+    display: flex;
+    flex-direction: column;
+    align-items: center;
+    gap: 1.25rem;
+    padding-top: 1.5rem;
+  }
+}
+
+.match-score__ring--large {
+  width: 140px;
+  height: 140px;
+  border-width: 6px;
+
+  .match-score__value {
+    font-size: 2.5rem;
+  }
+}
+
+.match-score__sub--large {
+  font-size: 1rem;
+  font-weight: 600;
+}
+
+.skill-gaps--inline {
+  width: 100%;
+  max-width: 480px;
+  align-items: center;
+
+  .skill-gaps__label {
+    text-align: center;
+  }
+
+  .skill-gaps__list {
+    justify-content: center;
+  }
+}
+
+
+
+// Mobile top bar — hidden on desktop
+.mobile-topbar {
+  display: none;
+}
+
+// Mobile drawer overlay — hidden on desktop
+.mobile-overlay {
+  display: none;
+}
+
+@media (max-width: 768px) {
+  .interview-page {
+    padding: 0;
+    flex-direction: column;
+    align-items: stretch;
+  }
+
+  // Show mobile top bar
+  .mobile-topbar {
+    display: flex;
+    align-items: center;
+    gap: 0.75rem;
+    padding: 0.9rem 1rem;
+    background-color: $bg-card;
+    border-bottom: 1px solid $border-color;
+    position: sticky;
+    top: 0;
+    z-index: 50;
+
+    &__menu-btn {
+      display: flex;
+      align-items: center;
+      justify-content: center;
+      background: none;
+      border: none;
+      color: $text-primary;
+      cursor: pointer;
+      padding: 0.25rem;
+      border-radius: 0.35rem;
+      transition: background-color 0.15s;
+
+      &:hover {
+        background-color: $bg-panel;
+      }
+    }
+
+    &__title {
+      font-size: 0.9rem;
+      font-weight: 600;
+      color: $text-primary;
+    }
+
+    &__spacer {
+      flex: 1;
+    }
+  }
+
+  // Overlay backdrop
+  .mobile-overlay {
+    display: flex;
+    position: fixed;
+    inset: 0;
+    background-color: rgba(0, 0, 0, 0.6);
+    z-index: 200;
+    backdrop-filter: blur(2px);
+    animation: fadeIn 0.22s ease;
+
+    &--closing {
+      animation: fadeOut 0.22s ease forwards;
+    }
+  }
+
+  // Slide-in drawer
+  .mobile-drawer {
+    width: 280px;
+    max-width: 85vw;
+    height: 100%;
+    background-color: $bg-card;
+    border-right: 1px solid $border-color;
+    display: flex;
+    flex-direction: column;
+    gap: 0.25rem;
+    padding: 1.25rem 1rem;
+    overflow-y: auto;
+    animation: slideIn 0.22s ease;
+
+    &--closing {
+      animation: slideOut 0.22s ease forwards;
+    }
+
+    &__header {
+      display: flex;
+      align-items: center;
+      justify-content: space-between;
+      margin-bottom: 1rem;
+    }
+
+    &__title {
+      font-size: 0.95rem;
+      font-weight: 700;
+      color: $text-primary;
+    }
+
+    &__close {
+      display: flex;
+      align-items: center;
+      justify-content: center;
+      background: none;
+      border: none;
+      color: $text-muted;
+      cursor: pointer;
+      padding: 0.25rem;
+      border-radius: 0.35rem;
+      transition: color 0.15s, background-color 0.15s;
+
+      &:hover {
+        color: $text-primary;
+        background-color: $bg-panel;
+      }
+    }
+
+    &__divider {
+      height: 1px;
+      background-color: $border-color;
+      margin: 1rem 0;
+    }
+
+    // Match score inside drawer — horizontal compact layout
+    .match-score {
+      align-items: flex-start;
+      flex-direction: row;
+      flex-wrap: wrap;
+      gap: 0.75rem;
+
+      &__label {
+        width: 100%;
+        margin-bottom: 0;
+      }
+
+      &__ring {
+        width: 64px;
+        height: 64px;
+        border-width: 3px;
+      }
+
+      &__value {
+        font-size: 1.2rem;
+      }
+
+      &__sub {
+        align-self: center;
+        text-align: left;
+        font-size: 0.8rem;
+      }
+    }
+  }
+
+  @keyframes slideIn {
+    from { transform: translateX(-100%); }
+    to   { transform: translateX(0); }
+  }
+
+  @keyframes slideOut {
+    from { transform: translateX(0); }
+    to   { transform: translateX(-100%); }
+  }
+
+  @keyframes fadeIn {
+    from { opacity: 0; }
+    to   { opacity: 1; }
+  }
+
+  @keyframes fadeOut {
+    from { opacity: 1; }
+    to   { opacity: 0; }
+  }
+
+  // Layout — hide left nav and right sidebar on mobile
+  .interview-layout {
+    flex-direction: column;
+    border-radius: 0;
+    border: none;
+    min-height: unset;
+  }
+
+  .interview-nav,
+  .interview-sidebar,
+  .interview-divider {
+    display: none;
+  }
+
+  // Content takes full width
+  .interview-content {
+    max-height: unset;
+    padding: 1.25rem 1rem 2rem;
+    overflow-y: visible;
+  }
+
+  // Roadmap timeline tweak
+  .roadmap-list::before {
+    left: 16px;
+  }
+
+  .roadmap-day {
+    padding-left: 2.5rem;
+
+    &::before {
+      left: 9px;
+    }
+  }
+}
+
