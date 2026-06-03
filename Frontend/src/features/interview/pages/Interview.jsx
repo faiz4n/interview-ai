@@ -257,7 +257,15 @@ const Interview = () => {
               <span className="match-score__value">{report.matchScore}</span>
               <span className="match-score__pct">%</span>
             </div>
-            <p className="match-score__sub">Good match for this role</p>
+            <p className="match-score__sub">
+              {report.matchScore >= 80
+                ? "Strong match for this role"
+                : report.matchScore >= 60
+                  ? "Good match for this role"
+                  : report.matchScore >= 40
+                    ? "Partial match for this role"
+                    : "Low match for this role"}
+            </p>
           </div>
 
           {/* Skill Gaps */}
