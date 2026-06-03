@@ -466,6 +466,10 @@ $font-stack:
   }
 
   .panel {
+    &__textarea {
+      min-height: 200px;
+    }
+
     &--left {
       .char-counter {
         bottom: 1.5rem;
