@@ -1,3 +1,5 @@
+@use "sass:color";
+
 // ── Variables ────────────────────────────────────────────────────────────────
 $bg-page: #0d1117;
 $bg-card: #161b22;
@@ -245,6 +247,40 @@ $font-stack:
     color: $text-muted;
     margin: 0;
   }
+
+  &__content {
+    display: flex;
+    flex-direction: column;
+    align-items: center;
+    gap: 0.35rem;
+    width: 100%;
+
+    &--file {
+      gap: 0.5rem;
+      width: 100%;
+    }
+  }
+
+  &__checkmark {
+    font-size: 1.5rem;
+    color: $accent;
+    font-weight: bold;
+  }
+
+  &__file-icon {
+    color: $accent;
+    flex-shrink: 0;
+  }
+
+  &__file-name {
+    font-size: 0.875rem;
+    font-weight: 500;
+    color: $text-primary;
+    margin: 0;
+    word-break: break-word;
+    text-align: center;
+    max-width: 90%;
+  }
 }
 
 // ── OR Divider ────────────────────────────────────────────────────────────────
@@ -308,13 +344,18 @@ $font-stack:
   display: flex;
   align-items: center;
   gap: 0.5rem;
-  padding: 0.75rem 1.5rem;
-  background: linear-gradient(135deg, $accent 0%, darken($accent, 10%) 100%);
+  padding-inline: 0.75rem;
+  padding-block: 0.75rem;
+  background: linear-gradient(
+    135deg,
+    $accent 0%,
+    color.adjust($accent, $lightness: -10%) 100%
+  );
   color: #fff;
   font-size: 0.9rem;
   font-weight: 600;
   border: none;
-  border-radius: 0.5rem;
+  border-radius: 1.5rem;
   cursor: pointer;
   transition:
     opacity 0.2s,
@@ -338,21 +379,20 @@ $font-stack:
   max-width: 900px;
 
   .reports-list {
-    display: flex;
+    display: grid;
+    grid-template-columns: repeat(auto-fit, minmax(250px, 1fr));
     gap: 0.75rem;
-    flex-wrap: wrap;
 
     .report-item {
       background-color: $bg-card;
       border: 1px solid $border-color;
       border-radius: 0.5rem;
       padding: 1rem;
-      flex: 1;
+      height: 140px;
       display: flex;
       flex-direction: column;
       gap: 0.5rem;
       cursor: pointer;
-      flex-shrink: 0;
 
       .match-score {
         font-size: 0.8rem;

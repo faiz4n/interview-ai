@@ -26,6 +26,11 @@ authRouter.post("/login", authController.loginUserController);
  */
 authRouter.get("/logout", authController.logoutUserController);
 
+/**
+ * @route GET /api/auth/get-me
+ * @description get the details of the logged in user
+ * @access Private
+ */
 authRouter.get(
   "/get-me",
   authMiddleware.authUser,

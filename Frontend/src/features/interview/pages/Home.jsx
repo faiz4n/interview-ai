@@ -1,6 +1,42 @@
+import { useState } from "react";
+import { useInterview } from "../hooks/useInterview";
 import "../styles/home.scss";
+import { useRef } from "react";
+import { useNavigate } from "react-router";
 
 const Home = () => {
+  const { loading, generateReport, reports } = useInterview();
+  const [jobDescription, setJobDescription] = useState("");
+  const [selfDescription, setSelfDescription] = useState("");
+  const [resumeFileName, setResumeFileName] = useState("");
+  const resumeInputRef = useRef(null);
+
+  const navigate = useNavigate();
+
+  const handleGenerateReport = async () => {
+    const resumeFile = resumeInputRef.current.files[0];
+    if (!jobDescription) {
+      alert("Please enter the job description.");
+      return;
+    }
+
+    const data = await generateReport({
+      jobDescription,
+      selfDescription,
+      resumeFile: resumeFile || null,
+    });
+    navigate(`/interview/${data._id}`);
+  };
+
+  if (loading) {
+    return (
+      <main className="loading-screen">
+        <div className="spinner" />
+        <p>Generating your personalized interview plan...</p>
+      </main>
+    );
+  }
+
   return (
     <div className="home-page">
       {/* Page Header */}
@@ -40,6 +76,7 @@ const Home = () => {
               <span className="badge badge--required">Required</span>
             </div>
             <textarea
+              onChange={(e) => setJobDescription(e.target.value)}
               className="panel__textarea"
               placeholder={`Paste the full job description here...\ne.g. 'Senior Frontend Engineer at Google requires proficiency in React, TypeScript, and large-scale system design...'`}
               maxLength={5000}
@@ -76,33 +113,60 @@ const Home = () => {
             <div className="upload-section">
               <label className="section-label">Upload Resume</label>
               <label className="dropzone" htmlFor="resume">
-                <span className="dropzone__icon">
-                  <svg
-                    xmlns="http://www.w3.org/2000/svg"
-                    width="28"
-                    height="28"
-                    viewBox="0 0 24 24"
-                    fill="none"
-                    stroke="currentColor"
-                    strokeWidth="2"
-                    strokeLinecap="round"
-                    strokeLinejoin="round"
-                  >
-                    <polyline points="16 16 12 12 8 16" />
-                    <line x1="12" y1="12" x2="12" y2="21" />
-                    <path d="M20.39 18.39A5 5 0 0 0 18 9h-1.26A8 8 0 1 0 3 16.3" />
-                  </svg>
-                </span>
-                <p className="dropzone__title">
-                  Click to upload or drag &amp; drop
-                </p>
-                <p className="dropzone__subtitle">PDF or DOCX (Max 5MB)</p>
+                {resumeFileName ? (
+                  <div className="dropzone__content dropzone__content--file">
+                    <svg
+                      xmlns="http://www.w3.org/2000/svg"
+                      width="32"
+                      height="32"
+                      viewBox="0 0 24 24"
+                      fill="none"
+                      stroke="currentColor"
+                      strokeWidth="2"
+                      strokeLinecap="round"
+                      strokeLinejoin="round"
+                      className="dropzone__file-icon"
+                    >
+                      <path d="M14 2H6a2 2 0 0 0-2 2v16a2 2 0 0 0 2 2h12a2 2 0 0 0 2-2V8z" />
+                      <polyline points="14 2 14 8 20 8" />
+                    </svg>
+                    <p className="dropzone__file-name">{resumeFileName}</p>
+                  </div>
+                ) : (
+                  <div className="dropzone__content">
+                    <span className="dropzone__icon">
+                      <svg
+                        xmlns="http://www.w3.org/2000/svg"
+                        width="28"
+                        height="28"
+                        viewBox="0 0 24 24"
+                        fill="none"
+                        stroke="currentColor"
+                        strokeWidth="2"
+                        strokeLinecap="round"
+                        strokeLinejoin="round"
+                      >
+                        <polyline points="16 16 12 12 8 16" />
+                        <line x1="12" y1="12" x2="12" y2="21" />
+                        <path d="M20.39 18.39A5 5 0 0 0 18 9h-1.26A8 8 0 1 0 3 16.3" />
+                      </svg>
+                    </span>
+                    <p className="dropzone__title">
+                      Click to upload or drag &amp; drop
+                    </p>
+                    <p className="dropzone__subtitle">PDF or DOCX (Max 5MB)</p>
+                  </div>
+                )}
                 <input
+                  ref={resumeInputRef}
                   hidden
                   type="file"
                   id="resume"
                   name="resume"
                   accept=".pdf,.docx"
+                  onChange={(e) =>
+                    setResumeFileName(e.target.files[0]?.name || "")
+                  }
                 />
               </label>
             </div>
@@ -118,6 +182,9 @@ const Home = () => {
                 Quick Self-Description
               </label>
               <textarea
+                onChange={(e) => {
+                  setSelfDescription(e.target.value);
+                }}
                 id="selfDescription"
                 name="selfDescription"
                 className="panel__textarea panel__textarea--short"
@@ -168,7 +235,7 @@ const Home = () => {
           <span className="footer-info">
             AI-Powered Interview Report Generation &bull; Approx 30s
           </span>
-          <button className="generate-btn">
+          <button onClick={handleGenerateReport} className="generate-btn">
             <svg
               xmlns="http://www.w3.org/2000/svg"
               width="16"
@@ -178,10 +245,36 @@ const Home = () => {
             >
               <path d="M12 2l2.4 7.4H22l-6.2 4.5 2.4 7.4L12 17l-6.2 4.3 2.4-7.4L2 9.4h7.6z" />
             </svg>
-            Generate My Interview Strategy
+            Generate My Interview Report
           </button>
         </div>
       </div>
+
+      {/* Recent Reports List */}
+      {reports.length > 0 && (
+        <section className="recent-reports">
+          <h2>My Recent Interview Reports</h2>
+          <ul className="reports-list">
+            {reports.map((report) => (
+              <li
+                key={report._id}
+                className="report-item"
+                onClick={() => navigate(`/interview/${report._id}`)}
+              >
+                <h3>{report.title || "Untitled Position"}</h3>
+                <p className="report-date">
+                  {new Date(report.createdAt).toLocaleDateString()}
+                </p>
+                <p
+                  className={`match-score ${report.matchScore >= 70 ? "high" : report.matchScore >= 50 ? "medium" : "low"}`}
+                >
+                  Match Score: {report.matchScore}%
+                </p>
+              </li>
+            ))}
+          </ul>
+        </section>
+      )}
     </div>
   );
 };
