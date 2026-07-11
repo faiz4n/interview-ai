@@ -1,6 +1,7 @@
 const { GoogleGenAI } = require("@google/genai");
 const { z } = require("zod");
 const { zodToJsonSchema } = require("zod-to-json-schema");
+const puppeteer = require("puppeteer");
 
 const ai = new GoogleGenAI({
   apiKey: process.env.GOOGLE_GENAI_API_KEY,
@@ -122,4 +123,44 @@ Your task is to analyze the provided Resume and Job Description (JD) to generate
   return result;
 }
 
-module.exports = { generateInterviewReport };
+async function generatePdfFromHtml(htmlContent) {
+  const browser = await puppeteer.launch();
+  const page = await browser.newPage();
+  await page.setContent(htmlContent, { waitUntil: "networkidle0" });
+
+  const pdfBuffer = await page.pdf({ format: "A4" });
+
+  await browser.close();
+  return pdfBuffer;
+}
+
+async function generateResumePdf({ resume, jobDescription, selfDescription }) {
+  const resumePdfSchema = z.object({
+    html: z
+      .string()
+      .describe(
+        "The HTML content of the generated resume PDF which can be converted to PDF using any library like puppeteer",
+      ),
+  });
+
+  const prompt = `Generate a resume in HTML format based on the following information:
+
+    Self Description: ${selfDescription}
+    Resume: ${resume}
+    Job Description: ${jobDescription}
+    The response should be a JSON object with a single field 'html' containing the HTML content of the generated resume PDF .`;
+
+  const response = await ai.models.generateContent({
+    model: "gemini-3-flash-preview",
+    contents: prompt,
+    config: {
+      responseMimeType: "application/json",
+      responseSchema: z.toJSONSchema(resumePdfSchema),
+    },
+  });
+
+  const jsonContent = JSON.parse(response.text);
+  return result;
+}
+
+module.exports = { generateInterviewReport, generateResumePdf };
