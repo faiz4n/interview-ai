@@ -1,0 +1,9 @@
+.git
+.gitignore
+
+Frontend/node_modules
+Backend/node_modules
+
+Frontend/dist
+
+README.md
