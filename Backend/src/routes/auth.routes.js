@@ -37,4 +37,16 @@ authRouter.get(
   authController.getMeController,
 );
 
+/**
+ * @route GET /api/auth/health
+ * @description Health check endpoint
+ * @access Public
+ */
+authRouter.get("/health", (req, res) => {
+  res.status(200).json({
+    success: true,
+    message: "OK",
+  });
+});
+
 module.exports = authRouter;
